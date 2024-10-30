@@ -1,9 +1,17 @@
-from flask import jsonify, request
 from internal.domain.author.author_service import AuthorService
+from transport.http.response.response import Response
 
 class AuthorController:
     @staticmethod
     def list():
         authors = AuthorService.list()
-        authors_list = [{"id": author.id, "name": author.name, "bio": author.bio, "birth_date": author.birth_date} for author in authors]
-        return jsonify(authors_list), 200
+        authors_list = [
+            {
+                "id": author.id,
+                "name": author.name,
+                "bio": author.bio,
+                "birth_date": author.birth_date
+            } 
+            for author in authors
+        ]
+        return Response.handleResponse(authors_list)
