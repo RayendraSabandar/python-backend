@@ -15,5 +15,4 @@ class Book(db.Model):
     deleted_at = db.Column(db.DateTime, nullable=True)
 
     def soft_delete(self):
-        """Mark the record as deleted by setting deleted_at to the current datetime."""
         self.deleted_at = datetime.now()
