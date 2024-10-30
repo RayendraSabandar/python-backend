@@ -9,7 +9,9 @@ class AuthorRepository:
 
     @staticmethod
     def list():
-        return Author.query.all()
+        return Author.query.filter_by(
+            deleted_at = None
+        )
     
     @staticmethod
     def find_by_id(id):
