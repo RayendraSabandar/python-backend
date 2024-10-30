@@ -1,4 +1,5 @@
 from internal.domain.author.author_service import AuthorService
+from internal.domain.book.book_service import BookService
 from transport.http.response.response import Response
 from flask import request
 from werkzeug.exceptions import NotFound
@@ -25,6 +26,21 @@ class AuthorController:
                 "birth_date": author.birth_date
             } 
             for author in authors
+        ]
+        return Response.handleResponse(res)
+    
+    @staticmethod
+    def list_book_by_author_id(author_id):
+        books = BookService.list_by_author_id(author_id)
+        res = [
+            {
+                "id": book.id,
+                "title": book.title,
+                "description": book.description,
+                "publish_date": book.publish_date,
+                "author_id": book.author_id
+            } 
+            for book in books
         ]
         return Response.handleResponse(res)
     

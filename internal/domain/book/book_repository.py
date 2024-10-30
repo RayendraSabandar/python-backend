@@ -14,6 +14,13 @@ class BookRepository:
         )
     
     @staticmethod
+    def list_by_author_id(author_id):
+        return Book.query.filter_by(
+            deleted_at = None,
+            author_id = author_id
+        )
+    
+    @staticmethod
     def find_by_id(id):
         return db.get_or_404(Book, id)
     

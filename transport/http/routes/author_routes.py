@@ -11,6 +11,10 @@ def create():
 def list():
     return AuthorController.list()
 
+@author_bp_routes.route('/<int:author_id>/books', methods=['GET'])
+def list_book_by_author_id(author_id):
+    return AuthorController.list_book_by_author_id(author_id)
+
 @author_bp_routes.route('/<int:author_id>', methods=['GET'])
 def find_by_id(author_id):
     return AuthorController.find_by_id(author_id)
