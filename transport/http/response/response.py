@@ -1,4 +1,5 @@
 from flask import jsonify
+from werkzeug.exceptions import NotFound
 
 class Response:
     @staticmethod
@@ -8,10 +9,15 @@ class Response:
         }), 200
     
     @staticmethod
-    def handleErr(e):
+    def handleErr(e, custom_message):
+        message = str(e)
+        status_code = 500
+        if isinstance(e, NotFound):
+            message = custom_message
+            status_code = 404
         return jsonify({
             "error": {
                 "type": type(e).__name__,
-                "message": str(e),
+                "message": message,
             }
-        }), 500
+        }), status_code
