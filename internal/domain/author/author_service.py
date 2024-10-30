@@ -17,3 +17,7 @@ class AuthorService:
     @staticmethod
     def list():
         return AuthorRepository.list()
+    
+    @staticmethod
+    def find_by_id(id):
+        return AuthorRepository.find_by_id(id)

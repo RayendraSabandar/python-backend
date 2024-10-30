@@ -15,7 +15,7 @@ class AuthorController:
     @staticmethod
     def list():
         authors = AuthorService.list()
-        authors_list = [
+        res = [
             {
                 "id": author.id,
                 "name": author.name,
@@ -24,4 +24,18 @@ class AuthorController:
             } 
             for author in authors
         ]
-        return Response.handleResponse(authors_list)
+        return Response.handleResponse(res)
+    
+    @staticmethod
+    def find_by_id(author_id):
+        try:
+            res = AuthorService.find_by_id(author_id)
+            return {
+                    "id": res.id,
+                    "name": res.name,
+                    "bio": res.bio,
+                    "birth_date": res.birth_date
+                } 
+
+        except Exception as e:
+            return Response.handleErr(e, "author not found")

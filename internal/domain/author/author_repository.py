@@ -10,3 +10,7 @@ class AuthorRepository:
     @staticmethod
     def list():
         return Author.query.all()
+    
+    @staticmethod
+    def find_by_id(id):
+        return db.get_or_404(Author, id)
