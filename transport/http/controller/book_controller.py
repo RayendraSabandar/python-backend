@@ -1,6 +1,8 @@
 from internal.domain.book.book_service import BookService
 from transport.http.response.response import Response
 from flask import request
+from werkzeug.exceptions import NotFound
+
 
 class BookController:
     @staticmethod
@@ -27,3 +29,21 @@ class BookController:
             for book in books
         ]
         return Response.handleResponse(res)
+    
+    @staticmethod
+    def find_by_id(book_id):
+        try:
+            res = BookService.find_by_id(book_id)
+            return {
+                    "id": res.id,
+                    "title": res.title,
+                    "description": res.description,
+                    "publish_date": res.publish_date,
+                    "author_id": res.author_id
+                } 
+        
+        except Exception as e:
+            if isinstance(e, NotFound):
+                return Response.handleErr(e, "book not found")
+            
+            return Response.handleErr(e, None)

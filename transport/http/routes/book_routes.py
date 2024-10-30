@@ -10,3 +10,7 @@ def create():
 @book_bp_routes.route('/', methods=['GET'])
 def list():
     return BookController.list()
+
+@book_bp_routes.route('/<int:book_id>', methods=['GET'])
+def find_by_id(book_id):
+    return BookController.find_by_id(book_id)

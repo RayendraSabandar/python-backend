@@ -18,3 +18,7 @@ class BookService:
     @staticmethod
     def list():
         return BookRepository.list()
+    
+    @staticmethod
+    def find_by_id(id):
+        return BookRepository.find_by_id(id)
