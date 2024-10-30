@@ -66,3 +66,15 @@ class BookController:
                 return Response.handleErr(e, "book not found")
             
             return Response.handleErr(e, None)
+        
+    @staticmethod
+    def delete(book_id):
+        try:
+            BookService.soft_delete(book_id)
+            return Response.handleResponse(None)
+        
+        except Exception as e:
+            if isinstance(e, NotFound):
+                return Response.handleErr(e, "book not found")
+            
+            return Response.handleErr(e, None)

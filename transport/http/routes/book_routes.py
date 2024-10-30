@@ -18,3 +18,7 @@ def find_by_id(book_id):
 @book_bp_routes.route('/<int:book_id>', methods=['PATCH'])
 def update(book_id):
     return BookController.update(book_id)
+
+@book_bp_routes.route('/<int:book_id>', methods=['DELETE'])
+def delete(book_id):
+    return BookController.delete(book_id)
