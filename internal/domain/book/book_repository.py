@@ -16,3 +16,8 @@ class BookRepository:
     @staticmethod
     def find_by_id(id):
         return db.get_or_404(Book, id)
+    
+    @staticmethod
+    def update(author):
+        db.session.commit()
+        return author

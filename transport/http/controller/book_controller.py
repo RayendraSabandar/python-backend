@@ -47,3 +47,22 @@ class BookController:
                 return Response.handleErr(e, "book not found")
             
             return Response.handleErr(e, None)
+        
+    @staticmethod
+    def update(book_id):
+        try:
+            request_body = request.json
+            res = BookService.update(book_id, request_body)
+            return {
+                "id": res.id,
+                "title": res.title,
+                "description": res.description,
+                "publish_date": res.publish_date,
+                "author_id": res.author_id
+            } 
+
+        except Exception as e:
+            if isinstance(e, NotFound):
+                return Response.handleErr(e, "book not found")
+            
+            return Response.handleErr(e, None)

@@ -14,3 +14,7 @@ def list():
 @book_bp_routes.route('/<int:book_id>', methods=['GET'])
 def find_by_id(book_id):
     return BookController.find_by_id(book_id)
+
+@book_bp_routes.route('/<int:book_id>', methods=['PATCH'])
+def update(book_id):
+    return BookController.update(book_id)
