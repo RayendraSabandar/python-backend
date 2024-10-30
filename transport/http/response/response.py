@@ -4,6 +4,11 @@ from werkzeug.exceptions import NotFound
 class Response:
     @staticmethod
     def handleResponse(data):
+        if not data:
+            return jsonify({
+                "success": True
+            })
+        
         return jsonify({
             "data": data
         }), 200

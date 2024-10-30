@@ -1,6 +1,7 @@
 from internal.domain.author.author_service import AuthorService
 from transport.http.response.response import Response
 from flask import request
+from werkzeug.exceptions import NotFound
 
 class AuthorController:
     @staticmethod
@@ -8,9 +9,10 @@ class AuthorController:
         try:
             request_body = request.json
             AuthorService.create(request_body)
+            return Response.handleResponse(None)
         
         except Exception as e:
-            return Response.handleErr(e)
+            return Response.handleErr(e, None)
 
     @staticmethod
     def list():
@@ -38,7 +40,10 @@ class AuthorController:
                 } 
 
         except Exception as e:
-            return Response.handleErr(e, "author not found")
+            if isinstance(e, NotFound):
+                return Response.handleErr(e, "author not found")
+            
+            return Response.handleErr(e, None)
         
     @staticmethod
     def update(author_id):
@@ -53,4 +58,20 @@ class AuthorController:
             } 
 
         except Exception as e:
-            return Response.handleErr(e, "author not found")
+            if isinstance(e, NotFound):
+                return Response.handleErr(e, "author not found")
+            
+            return Response.handleErr(e, None)
+
+        
+    @staticmethod
+    def delete(author_id):
+        try:
+            AuthorService.soft_delete(author_id)
+            return Response.handleResponse(None)
+        
+        except Exception as e:
+            if isinstance(e, NotFound):
+                return Response.handleErr(e, "author not found")
+            
+            return Response.handleErr(e, None)
