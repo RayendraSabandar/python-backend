@@ -39,3 +39,18 @@ class AuthorController:
 
         except Exception as e:
             return Response.handleErr(e, "author not found")
+        
+    @staticmethod
+    def update(author_id):
+        try:
+            request_body = request.json
+            res = AuthorService.update(author_id, request_body)
+            return {
+                "id": res.id,
+                "name": res.name,
+                "bio": res.bio,
+                "birth_date": res.birth_date
+            } 
+
+        except Exception as e:
+            return Response.handleErr(e, "author not found")
