@@ -15,7 +15,6 @@ app = Flask(__name__)
 CORS(app)
 app.config.from_object(Config)
 
-# Initialize the database and migrations
 db.init_app(app)
 
 @app.teardown_appcontext
