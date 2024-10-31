@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from dotenv import load_dotenv
 from config import Config
-from database.database import init_db
+from database.database import db
 from flask_cors import CORS
 from transport.http.routes import register_blueprints
 from internal.models.author_model import Author
@@ -16,11 +16,14 @@ CORS(app)
 app.config.from_object(Config)
 
 # Initialize the database and migrations
-init_db(app)
+db.init_app(app)
+
+@app.teardown_appcontext
+def teardown_db(exception):
+    db.session.remove()
 
 ROUTE_PREFIX = os.getenv('ROUTE_PREFIX')
 PORT = os.getenv('PORT')
-print(ROUTE_PREFIX)
 
 @app.get("/ping")
 def ping():
