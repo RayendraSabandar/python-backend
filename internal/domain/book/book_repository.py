@@ -8,10 +8,24 @@ class BookRepository:
         db.session.commit()
     
     @staticmethod
-    def list():
-        return Book.query.filter_by(
+    def list(payload):
+        query = Book.query.filter_by(
             deleted_at = None
         )
+        print(f"payload.title: {payload.title}")
+        print(f"payload.description: {payload.description}")
+        print(f"payload.start_publish_date: {payload.title}")
+        print(f"payload.end_publish_date: {payload.end_publish_date}")
+        if payload.title:
+            query = query.filter(Book.title.ilike(f"%{payload.title}%"))
+        if payload.description:
+            query = query.filter(Book.description.ilike(f"%{payload.description}%"))
+        if payload.start_publish_date:
+            query = query.filter(Book.publish_date >= payload.start_publish_date)
+        if payload.end_publish_date:
+            query = query.filter(Book.publish_date <= payload.end_publish_date)
+
+        return query.all()
     
     @staticmethod
     def list_by_author_id(author_id):
