@@ -17,8 +17,8 @@ class BookService:
             raise e
     
     @staticmethod
-    def list():
-        return BookRepository.list()
+    def list(payload):
+        return BookRepository.list(payload)
     
     @staticmethod
     def list_by_author_id(author_id):

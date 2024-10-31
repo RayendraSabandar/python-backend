@@ -4,7 +4,6 @@ from internal.domain.book.book_service import BookService
 from transport.http.response.response import Response
 from flask import request
 from werkzeug.exceptions import NotFound
-from datetime import datetime
 from dateutil import parser
 
 class AuthorController:
@@ -21,16 +20,14 @@ class AuthorController:
     @staticmethod
     def list():
         try:
-            filterName = request.args.get('name', None)
-
+            filter_name = request.args.get('name', None)
             start_birth_date_str = request.args.get('start_birth_date', None)
             end_birth_date_str = request.args.get('end_birth_date', None)
             start_birth_date = parser.isoparse(start_birth_date_str) if start_birth_date_str else None
             end_birth_date = parser.isoparse(end_birth_date_str) if end_birth_date_str else None
 
-
             authors = AuthorService.list(ListPayload(
-                name=filterName,
+                name=filter_name,
                 start_birth_date=start_birth_date,
                 end_birth_date=end_birth_date
             ))
