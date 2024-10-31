@@ -1,12 +1,24 @@
+# app/transaction.py
+from flask import g
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+from contextlib import contextmanager
 
-# Initialize SQLAlchemy and Migrate instances
 db = SQLAlchemy()
-migrate = Migrate()
 
-# add transaction
-# create context to wrap the db
-def init_db(app):
-    db.init_app(app)
-    migrate.init_app(app, db)
+@contextmanager
+def transaction():
+    session = db.session
+    session.begin()
+    try:
+        yield session
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        raise e
+    finally:
+        session.remove()
+
+def get_db():
+    if 'db' not in g:
+        g.db = db.session
+    return g.db
