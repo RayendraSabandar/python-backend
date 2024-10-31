@@ -1,16 +1,15 @@
-from database.database import db
 from internal.models.book_model import Book
 from sqlalchemy.orm import Session
+from flask import abort
 
 class BookRepository:
     @staticmethod
-    def create(book):
-        db.session.add(book)
-        db.session.commit()
+    def create(db: Session, book):
+        db.add(book)
     
     @staticmethod
-    def list(payload):
-        query = Book.query.filter_by(
+    def list(db: Session, payload):
+        query = db.query(Book).filter_by(
             deleted_at = None
         )
         print(f"payload.title: {payload.title}")
@@ -36,10 +35,16 @@ class BookRepository:
         )
     
     @staticmethod
-    def find_by_id(id):
-        return db.get_or_404(Book, id)
+    def find_by_id(db: Session, id):
+        book = db.query(Book).filter_by(
+            deleted_at = None,
+            id = id
+        ).first()
+        if book is None:
+            abort(404)
+
+        return book
     
     @staticmethod
-    def update(author):
-        db.session.commit()
+    def update(db: Session, author):
         return author

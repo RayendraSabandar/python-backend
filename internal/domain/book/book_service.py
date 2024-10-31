@@ -4,9 +4,9 @@ from datetime import datetime
 
 class BookService:
     @staticmethod
-    def create(request_body):
+    def create(db, request_body):
         try:
-            BookRepository.create(Book(
+            BookRepository.create(db, Book(
                 title= request_body['title'],
                 description= request_body['description'],
                 publish_date= request_body['publish_date'],
@@ -17,36 +17,36 @@ class BookService:
             raise e
     
     @staticmethod
-    def list(payload):
-        return BookRepository.list(payload)
+    def list(db, payload):
+        return BookRepository.list(db, payload)
     
     @staticmethod
     def list_by_author_id(db, author_id):
         return BookRepository.list_by_author_id(db, author_id)
     
     @staticmethod
-    def find_by_id(id):
-        return BookRepository.find_by_id(id)
+    def find_by_id(db, id):
+        return BookRepository.find_by_id(db, id)
     
     @staticmethod
-    def update(id, request_body):
+    def update(db, id, request_body):
         try:
-            book = BookRepository.find_by_id(id)
+            book = BookRepository.find_by_id(db, id)
             book.title = request_body['title']
             book.description = request_body['description']
             book.publish_date = request_body['publish_date']
             book.author_id = request_body['author_id']
-            BookRepository.update(book)
+            BookRepository.update(db, book)
             return book
         except Exception as e:
             raise e
         
     @staticmethod
-    def soft_delete(id):
+    def soft_delete(db, id):
         try:
-            author = BookRepository.find_by_id(id)
+            author = BookRepository.find_by_id(db, id)
             author.deleted_at = datetime.now()
-            BookRepository.update(author)
+            BookRepository.update(db, author)
             return author
         except Exception as e:
             raise e
