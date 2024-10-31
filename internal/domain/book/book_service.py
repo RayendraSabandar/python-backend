@@ -21,8 +21,8 @@ class BookService:
         return BookRepository.list(payload)
     
     @staticmethod
-    def list_by_author_id(author_id):
-        return BookRepository.list_by_author_id(author_id)
+    def list_by_author_id(db, author_id):
+        return BookRepository.list_by_author_id(db, author_id)
     
     @staticmethod
     def find_by_id(id):

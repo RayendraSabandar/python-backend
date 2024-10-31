@@ -1,19 +1,18 @@
-from database.database import db
 from internal.models.author_model import Author
 from sqlalchemy import and_
+from sqlalchemy.orm import Session
+from flask import abort
 
 class AuthorRepository:
     @staticmethod
-    def create(author):
-        db.session.add(author)
-        db.session.commit()
+    def create(db: Session, author):
+        db.add(author)
 
     @staticmethod
-    def list(payload):
-        query = Author.query.filter_by(
+    def list(db: Session, payload):
+        query = db.query(Author).filter_by(
             deleted_at = None
         )
-
 
         if payload.name:
             query = query.filter(Author.name.ilike(f"%{payload.name}%"))
@@ -25,10 +24,13 @@ class AuthorRepository:
         return query.all()
     
     @staticmethod
-    def find_by_id(id):
-        return db.get_or_404(Author, id)
+    def find_by_id(db: Session, id):
+        author = db.get(Author, id)
+        if author is None:
+            abort(404)
+
+        return author
     
     @staticmethod
-    def update(author):
-        db.session.commit()
+    def update(db: Session, author):
         return author

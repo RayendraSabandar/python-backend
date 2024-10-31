@@ -4,9 +4,9 @@ from datetime import datetime
 
 class AuthorService:
     @staticmethod
-    def create(request_body):
+    def create(db, request_body):
         try:
-            AuthorRepository.create(Author(
+            AuthorRepository.create(db, Author(
                 name= request_body['name'],
                 bio= request_body['bio'],
                 birth_date= request_body['birth_date']
@@ -16,36 +16,36 @@ class AuthorService:
             raise e
 
     @staticmethod
-    def list(payload):
+    def list(db, payload):
         try:
-            return AuthorRepository.list(payload)
+            return AuthorRepository.list(db, payload)
         
         except Exception as e:
             raise e
             
     
     @staticmethod
-    def find_by_id(id):
-        return AuthorRepository.find_by_id(id)
+    def find_by_id(db, id):
+        return AuthorRepository.find_by_id(db, id)
     
     @staticmethod
-    def update(id, request_body):
+    def update(db, id, request_body):
         try:
-            author = AuthorRepository.find_by_id(id)
+            author = AuthorRepository.find_by_id(db, id)
             author.name = request_body['name']
             author.bio = request_body['bio']
             author.birth_date = request_body['birth_date']
-            AuthorRepository.update(author)
+            AuthorRepository.update(db, author)
             return author
         except Exception as e:
             raise e
         
     @staticmethod
-    def soft_delete(id):
+    def soft_delete(db, id):
         try:
-            author = AuthorRepository.find_by_id(id)
+            author = AuthorRepository.find_by_id(db, id)
             author.deleted_at = datetime.now()
-            AuthorRepository.update(author)
+            AuthorRepository.update(db, author)
             return author
         except Exception as e:
             raise e

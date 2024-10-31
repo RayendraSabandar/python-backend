@@ -1,10 +1,11 @@
 from database.database import db
 from internal.models.book_model import Book
+from sqlalchemy.orm import Session
 
 class BookRepository:
     @staticmethod
-    def create(author):
-        db.session.add(author)
+    def create(book):
+        db.session.add(book)
         db.session.commit()
     
     @staticmethod
@@ -28,8 +29,8 @@ class BookRepository:
         return query.all()
     
     @staticmethod
-    def list_by_author_id(author_id):
-        return Book.query.filter_by(
+    def list_by_author_id(db: Session, author_id):
+        return db.query(Book).filter_by(
             deleted_at = None,
             author_id = author_id
         )
