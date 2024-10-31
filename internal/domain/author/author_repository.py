@@ -18,10 +18,8 @@ class AuthorRepository:
         if payload.name:
             query = query.filter(Author.name.ilike(f"%{payload.name}%"))
         if payload.start_birth_date:
-            print(f"payload start_birth_date {payload.start_birth_date}")
             query = query.filter(Author.birth_date >= payload.start_birth_date)
         if payload.end_birth_date:
-            print(f"payload end_birth_date {payload.end_birth_date}")
             query = query.filter(Author.birth_date <= payload.end_birth_date)
 
         return query.all()
