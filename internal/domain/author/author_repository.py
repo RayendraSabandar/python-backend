@@ -1,5 +1,4 @@
 from internal.models.author_model import Author
-from sqlalchemy import and_
 from sqlalchemy.orm import Session
 from flask import abort
 
@@ -25,7 +24,10 @@ class AuthorRepository:
     
     @staticmethod
     def find_by_id(db: Session, id):
-        author = db.get(Author, id)
+        author = db.query(Author).filter_by(
+            deleted_at = None,
+            id = id
+        ).first()
         if author is None:
             abort(404)
 
