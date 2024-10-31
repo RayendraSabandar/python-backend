@@ -29,11 +29,18 @@ class BookRepository:
         return query.items
     
     @staticmethod
-    def list_by_author_id(db: Session, author_id):
-        return db.query(Book).filter_by(
+    def list_by_author_id(db: Session, author_id, page, limit):
+        query = db.query(Book).filter_by(
             deleted_at = None,
             author_id = author_id
         )
+
+        query = query.paginate(
+            page= page,
+            per_page= limit
+        )
+
+        return query.items
     
     @staticmethod
     def find_by_id(db: Session, id):

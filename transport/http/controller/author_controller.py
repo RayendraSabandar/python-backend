@@ -55,7 +55,8 @@ class AuthorController:
     @staticmethod
     def list_book_by_author_id(author_id):
         with transaction() as db:
-            books = BookService.list_by_author_id(db, author_id)
+            pagination = Params.handlePagination(request)
+            books = BookService.list_by_author_id(db, author_id, pagination['page'], pagination['limit'])
             res = [
                 {
                     "id": book.id,
