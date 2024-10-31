@@ -16,8 +16,13 @@ class AuthorService:
             raise e
 
     @staticmethod
-    def list():
-        return AuthorRepository.list()
+    def list(payload):
+        try:
+            return AuthorRepository.list(payload)
+        
+        except Exception as e:
+            raise e
+            
     
     @staticmethod
     def find_by_id(id):

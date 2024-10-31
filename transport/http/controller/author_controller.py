@@ -1,8 +1,10 @@
 from internal.domain.author.author_service import AuthorService
+from internal.domain.author.author_payload import ListPayload
 from internal.domain.book.book_service import BookService
 from transport.http.response.response import Response
 from flask import request
 from werkzeug.exceptions import NotFound
+from dateutil import parser
 
 class AuthorController:
     @staticmethod
@@ -17,17 +19,31 @@ class AuthorController:
 
     @staticmethod
     def list():
-        authors = AuthorService.list()
-        res = [
-            {
-                "id": author.id,
-                "name": author.name,
-                "bio": author.bio,
-                "birth_date": author.birth_date
-            } 
-            for author in authors
-        ]
-        return Response.handleResponse(res)
+        try:
+            filter_name = request.args.get('name', None)
+            start_birth_date_str = request.args.get('start_birth_date', None)
+            end_birth_date_str = request.args.get('end_birth_date', None)
+            start_birth_date = parser.isoparse(start_birth_date_str) if start_birth_date_str else None
+            end_birth_date = parser.isoparse(end_birth_date_str) if end_birth_date_str else None
+
+            authors = AuthorService.list(ListPayload(
+                name=filter_name,
+                start_birth_date=start_birth_date,
+                end_birth_date=end_birth_date
+            ))
+            res = [
+                {
+                    "id": author.id,
+                    "name": author.name,
+                    "bio": author.bio,
+                    "birth_date": author.birth_date
+                } 
+                for author in authors
+            ]
+            return Response.handleResponse(res)
+        
+        except Exception as e:
+            return Response.handleErr(e, None)
     
     @staticmethod
     def list_book_by_author_id(author_id):
