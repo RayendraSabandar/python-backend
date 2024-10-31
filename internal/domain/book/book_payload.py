@@ -8,3 +8,5 @@ class ListPayload:
     description: Optional[str] = None
     start_publish_date: Optional[datetime] = None
     end_publish_date: Optional[datetime] = None
+    page: Optional[int] = None
+    limit: Optional[int] = None

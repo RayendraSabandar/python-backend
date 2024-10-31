@@ -1,6 +1,7 @@
 from internal.domain.book.book_service import BookService
 from internal.domain.book.book_payload import ListPayload
 from transport.http.response.response import Response
+from transport.http.params.params import Params
 from flask import request
 from werkzeug.exceptions import NotFound
 from dateutil import parser
@@ -29,11 +30,14 @@ class BookController:
                 start_publish_date = parser.isoparse(start_publish_date_str) if start_publish_date_str else None
                 end_publish_date = parser.isoparse(end_publish_date_str) if end_publish_date_str else None
                 
+                pagination = Params.handlePagination(request)
                 books = BookService.list(db, ListPayload(
                     title= filter_title,
                     description= filter_description,
                     start_publish_date= start_publish_date,
-                    end_publish_date= end_publish_date
+                    end_publish_date= end_publish_date,
+                    page=pagination['page'],
+                    limit=pagination['limit']
                 ))
                 res = [
                     {
