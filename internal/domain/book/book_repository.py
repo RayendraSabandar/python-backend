@@ -12,10 +12,6 @@ class BookRepository:
         query = db.query(Book).filter_by(
             deleted_at = None
         )
-        print(f"payload.title: {payload.title}")
-        print(f"payload.description: {payload.description}")
-        print(f"payload.start_publish_date: {payload.title}")
-        print(f"payload.end_publish_date: {payload.end_publish_date}")
         if payload.title:
             query = query.filter(Book.title.ilike(f"%{payload.title}%"))
         if payload.description:
@@ -24,15 +20,27 @@ class BookRepository:
             query = query.filter(Book.publish_date >= payload.start_publish_date)
         if payload.end_publish_date:
             query = query.filter(Book.publish_date <= payload.end_publish_date)
+        
+        query = query.paginate(
+            page= payload.page,
+            per_page= payload.limit
+        )
 
-        return query.all()
+        return query.items
     
     @staticmethod
-    def list_by_author_id(db: Session, author_id):
-        return db.query(Book).filter_by(
+    def list_by_author_id(db: Session, author_id, page, limit):
+        query = db.query(Book).filter_by(
             deleted_at = None,
             author_id = author_id
         )
+
+        query = query.paginate(
+            page= page,
+            per_page= limit
+        )
+
+        return query.items
     
     @staticmethod
     def find_by_id(db: Session, id):

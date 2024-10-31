@@ -2,6 +2,7 @@ from internal.domain.author.author_service import AuthorService
 from internal.domain.author.author_payload import ListPayload
 from internal.domain.book.book_service import BookService
 from transport.http.response.response import Response
+from transport.http.params.params import Params
 from flask import request
 from werkzeug.exceptions import NotFound
 from dateutil import parser
@@ -29,10 +30,13 @@ class AuthorController:
                 start_birth_date = parser.isoparse(start_birth_date_str) if start_birth_date_str else None
                 end_birth_date = parser.isoparse(end_birth_date_str) if end_birth_date_str else None
 
+                pagination = Params.handlePagination(request)
                 authors = AuthorService.list(db, ListPayload(
                     name=filter_name,
                     start_birth_date=start_birth_date,
-                    end_birth_date=end_birth_date
+                    end_birth_date=end_birth_date,
+                    page=pagination['page'],
+                    limit=pagination['limit']
                 ))
                 res = [
                     {
@@ -51,7 +55,8 @@ class AuthorController:
     @staticmethod
     def list_book_by_author_id(author_id):
         with transaction() as db:
-            books = BookService.list_by_author_id(db, author_id)
+            pagination = Params.handlePagination(request)
+            books = BookService.list_by_author_id(db, author_id, pagination['page'], pagination['limit'])
             res = [
                 {
                     "id": book.id,

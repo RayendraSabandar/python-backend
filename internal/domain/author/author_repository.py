@@ -20,7 +20,12 @@ class AuthorRepository:
         if payload.end_birth_date:
             query = query.filter(Author.birth_date <= payload.end_birth_date)
 
-        return query.all()
+        query = query.paginate(
+            page= payload.page,
+            per_page= payload.limit
+        )
+
+        return query.items
     
     @staticmethod
     def find_by_id(db: Session, id):
