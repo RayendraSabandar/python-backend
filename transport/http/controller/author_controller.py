@@ -22,12 +22,10 @@ class AuthorController:
     def list():
         try:
             filterName = request.args.get('name', None)
-
             start_birth_date_str = request.args.get('start_birth_date', None)
             end_birth_date_str = request.args.get('end_birth_date', None)
             start_birth_date = parser.isoparse(start_birth_date_str) if start_birth_date_str else None
             end_birth_date = parser.isoparse(end_birth_date_str) if end_birth_date_str else None
-
 
             authors = AuthorService.list(ListPayload(
                 name=filterName,
