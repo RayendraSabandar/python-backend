@@ -8,6 +8,7 @@ from transport.http.routes import register_blueprints
 from internal.models.author_model import Author
 from internal.models.book_model import Book
 from flask import jsonify
+from flask_migrate import Migrate
 
 load_dotenv()
 
@@ -16,6 +17,7 @@ CORS(app)
 app.config.from_object(Config)
 
 db.init_app(app)
+migrate = Migrate(app, db)
 
 @app.teardown_appcontext
 def teardown_db(exception):
