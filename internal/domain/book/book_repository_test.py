@@ -5,14 +5,14 @@ from internal.domain.book.book_repository import BookRepository
 
 @pytest.fixture
 def mock_book():
-    return Book(title="Test Book", description="Test description", publish_date="2000-01-01")
+    return Book(title="Test Book", description="Test description", author_id=1, publish_date="2000-01-01")
 
 @pytest.fixture
 def mock_list_books():
     books = [
-        Book(id=1, title="Book One", description="Test description One", publish_date="1990-01-01"),
-        Book(id=2, title="Book Two", description="Test description Two", publish_date="1985-05-05"),
-        Book(id=3, title="Book Three", description="Test description Three", publish_date="1975-10-10"),
+        Book(id=1, title="Book One", description="Test description One", author_id=1, publish_date="1990-01-01"),
+        Book(id=2, title="Book Two", description="Test description Two", author_id=2, publish_date="1985-05-05"),
+        Book(id=3, title="Book Three", description="Test description Three", author_id=3, publish_date="1975-10-10"),
     ]
     return books
 
@@ -57,8 +57,8 @@ def test_list_empty_array(mocker, mock_list_books_empty_array):
 def test_find_by_id_found(mocker, mock_book):
     db = mocker.Mock()
     db.query(Book).filter_by.return_value.first.return_value = mock_book
-    author = BookRepository.find_by_id(db, 1)
-    assert author == mock_book
+    book = BookRepository.find_by_id(db, 1)
+    assert book == mock_book
     db.query(Book).filter_by.assert_called_once_with(deleted_at=None, id=1)
 
 def test_find_by_id_not_found(mocker):
@@ -69,5 +69,5 @@ def test_find_by_id_not_found(mocker):
 
 def test_update(mocker, mock_book):
     db = mocker.Mock()
-    updated_author = BookRepository.update(db, mock_book)
-    assert updated_author == mock_book
+    updated_book = BookRepository.update(db, mock_book)
+    assert updated_book == mock_book
