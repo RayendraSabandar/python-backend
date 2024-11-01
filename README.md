@@ -26,11 +26,18 @@
     ```
     flask db history
     ```
-9. Migrate
+9. Make sure you have created a new db in postgres db (Dbeaver)
+10. Migrate
     ```
     flask db upgrade
     ```
-10. run the app
+11. run the app
     ```
     python app.py
     ```
+12. run test using
+    ```
+    python -m pytest
+    ```
+13. Import env and collection for postman from `docs` directory
+14. Run the endpoint from postman collections
